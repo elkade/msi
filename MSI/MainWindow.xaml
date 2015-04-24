@@ -5,7 +5,7 @@
         xmlns:fuzzyControls="clr-namespace:MSI.FuzzyControls"
         Title="MainWindow" Height="650" Width="1025" >
     <Grid>
-        <TabControl Margin="50,50,50,50">
+        <TabControl Margin="50,50,50,50" SelectionChanged="Selector_OnSelectionChanged">
             <TabItem Header="UserPanel">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -31,7 +31,7 @@
                     <TextBlock Grid.Column="1" Grid.Row="4" Name="Output" Height="50"/>
                 </Grid>
             </TabItem>
-            <TabItem Header="ExpertPanel">
+            <TabItem Header="ExpertPanel" >
                 <Grid >
                     <Grid.RowDefinitions>
                         <RowDefinition />
@@ -41,14 +41,10 @@
                         <ColumnDefinition />
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
-                    <fuzzyControls:InputFuzzyControl x:Name="RainControl" Grid.Column="0" Grid.Row="0" />
-                    <!--<fuzzyControls:InputFuzzyControl x:Name="TemperatureControl" Grid.Column="1" Grid.Row="0" />
-                    <fuzzyControls:InputFuzzyControl x:Name="VisibilityControl" Grid.Column="0" Grid.Row="1" />
-                    <fuzzyControls:InputFuzzyControl x:Name="HourControl" Grid.Column="1" Grid.Row="1" />-->
-                    <!--<msi:FuzzyControlBoth x:Name="RainControl" Grid.Column="0" Grid.Row="0" />
-                    <msi:FuzzyControlLeft x:Name="TemperatureControl" Grid.Column="1" Grid.Row="0" />
-                    <msi:FuzzyControlRight x:Name="VisibilityControl" Grid.Column="0" Grid.Row="1" />
-                    <msi:FuzzyControlBoth x:Name="HourControl" Grid.Column="1" Grid.Row="1" />-->
+                    <fuzzyControls:InputFuzzyControl Min="0" Max="10"  x:Name="RainControl" Grid.Column="0" Grid.Row="0"/>
+                    <fuzzyControls:InputFuzzyControl Min="-20" Max="40" x:Name="TemperatureControl" Grid.Column="1" Grid.Row="0" />
+                    <fuzzyControls:InputFuzzyControl Min="0" Max="1000" x:Name="VisibilityControl" Grid.Column="0" Grid.Row="1" />
+                    <fuzzyControls:InputFuzzyControl Min="0" Max="24" x:Name="HourControl" Grid.Column="1" Grid.Row="1" />
                 </Grid>
             </TabItem>
         </TabControl>

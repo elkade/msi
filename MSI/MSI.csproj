@@ -67,11 +67,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="FuzzyControls\FuzzyControlLeft.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="FuzzyControls\FuzzyControlRight.xaml">
+    <Page Include="FuzzyControls\FuzzyControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -92,11 +88,8 @@
     <Compile Include="FuzzyControls\FuzzyControlBoth.xaml.cs">
       <DependentUpon>FuzzyControlBoth.xaml</DependentUpon>
     </Compile>
-    <Compile Include="FuzzyControls\FuzzyControlLeft.xaml.cs">
-      <DependentUpon>FuzzyControlLeft.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="FuzzyControls\FuzzyControlRight.xaml.cs">
-      <DependentUpon>FuzzyControlRight.xaml</DependentUpon>
+    <Compile Include="FuzzyControls\FuzzyControl.xaml.cs">
+      <DependentUpon>FuzzyControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="FuzzyControls\InputFuzzyControl.xaml.cs">
       <DependentUpon>InputFuzzyControl.xaml</DependentUpon>

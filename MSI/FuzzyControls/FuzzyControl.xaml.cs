@@ -14,13 +14,13 @@ namespace MSI
     /// <summary>
     ///     Interaction logic for FuzzyControlBoth.xaml
     /// </summary>
-    public partial class FuzzyControlRight : UserControl, INotifyPropertyChanged
+    public partial class FuzzyControl : UserControl, INotifyPropertyChanged
     {
         public static readonly DependencyProperty MinProperty = DependencyProperty.Register(
-            "Min", typeof (double), typeof (FuzzyControlRight), new PropertyMetadata(default(double)));
+            "Min", typeof (double), typeof (FuzzyControl), new PropertyMetadata(default(double)));
 
         public static readonly DependencyProperty MaxProperty = DependencyProperty.Register(
-            "Max", typeof (double), typeof (FuzzyControlRight), new PropertyMetadata(default(double)));
+            "Max", typeof (double), typeof (FuzzyControl), new PropertyMetadata(default(double)));
 
         private double _bot;
 
@@ -33,8 +33,12 @@ namespace MSI
         private double _min;
         private double _top;
 
-        public FuzzyControlRight()
+        public bool IsLeft { get; set; }
+
+        public FuzzyControl()
         {
+            IsLeft = false;
+
             _max = 100;
             _min = 0;
 
@@ -66,15 +70,16 @@ namespace MSI
                 if (value <= _min || value < double.Epsilon)
                     return;
                 _max = value;
-                _top = _top >= _max ? _max - double.Epsilon : _top;
-                _mid = _mid >= _max ? _max - double.Epsilon : _mid;
-                _bot = _bot >= _max ? _max - double.Epsilon : _bot;
-                _top = _top < 0 ? 0 : _top;
-                _mid = _mid < _top ? _top + double.Epsilon : _mid;
-                _bot = _bot < _mid ? _mid + double.Epsilon : _bot;
+                _top = _top >= _max ? _max - 1 : _top;
+                _mid = _mid >= _max ? _max - 1 : _mid;
+                _bot = _bot >= _max ? _max - 1 : _bot;
+                _top = _top < _min ? _min : _top;
+                _mid = _mid < _top ? _top + 1 : _mid;
+                _bot = _bot < _mid ? _mid + 1 : _bot;
                 OnPropertyChanged("Top");
                 OnPropertyChanged("Mid");
                 OnPropertyChanged("Bot");
+                OnPropertyChanged();
                 UpdateChart();
             }
         }
@@ -86,7 +91,16 @@ namespace MSI
             {
                 if (value >= _max)
                     return;
-                _min = value;
+                _max = value;
+                _top = _top <= _min ? _min + 1 : _top;
+                _mid = _mid <= _min ? _min + 2 : _mid;
+                _bot = _bot <= _min ? _min + 2 : _bot;
+                _top = _top > _max ? _max - 1 : _top;
+                _mid = _mid > _top ? _top - 1 : _mid;
+                _bot = _bot > _mid ? _mid - 1 : _bot;
+                OnPropertyChanged("Top");
+                OnPropertyChanged("Mid");
+                OnPropertyChanged("Bot");
                 OnPropertyChanged();
                 UpdateChart();
             }
@@ -98,7 +112,7 @@ namespace MSI
             set
             {
                 _top = Min + (Max - Min)*(value/10);
-                _top = _top >= _mid ? _mid - double.Epsilon : _top;
+                _top = _top >= _mid ? _mid - 1 : _top;
                 UpdateChart();
             }
         }
@@ -109,8 +123,8 @@ namespace MSI
             set
             {
                 _mid = Min + (Max - Min)*(value/10);
-                _mid = _mid <= _top ? _top + double.Epsilon : _mid;
-                _mid = _mid >= _bot ? _bot - double.Epsilon : _mid;
+                _mid = _mid <= _top ? _top + 1 : _mid;
+                _mid = _mid >= _bot ? _bot - 1 : _mid;
                 UpdateChart();
             }
         }
@@ -121,20 +135,26 @@ namespace MSI
             set
             {
                 _bot = Min + (Max - Min)*(value/10);
-                _bot = _bot <= _mid ? _mid + double.Epsilon : _bot;
+                _bot = _bot <= _mid ? _mid + 1 : _bot;
                 UpdateChart();
             }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private void UpdateChart()
+        public void UpdateChart()
         {
+            if (_min >= _max)
+                return;
+            _dimension = new ContinuousDimension(FuzzyName, Description, Unit, (decimal)_min, (decimal)_max);
+
             if (_top == _mid || _mid == _bot)
                 return;
-            _dimension = new ContinuousDimension(FuzzyName, Description, Unit, (decimal) _min, (decimal) _max);
+            if(IsLeft)
+            _fuzzySet = new LeftQuadraticSet(_dimension, FuzzyName, (decimal) _top, (decimal) _mid, (decimal) _bot);
+            else
+                _fuzzySet = new RightQuadraticSet(_dimension, FuzzyName, (decimal)_top, (decimal)_mid, (decimal)_bot);
 
-            _fuzzySet = new RightQuadraticSet(_dimension, FuzzyName, (decimal) _top, (decimal) _mid, (decimal) _bot);
             //_fuzzySet = new RightQuadraticSet(_dimension, FuzzyName, Top, Mid,Bot);
             var chart = (PictureBox) Wfh.Child;
             var imgBuyIt = new RelationImage(_fuzzySet);

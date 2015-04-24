@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:msi="clr-namespace:MSI"
-             mc:Ignorable="d"
+             mc:Ignorable="d" DataContext="{Binding RelativeSource={RelativeSource Self}}"
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -16,19 +16,15 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <msi:FuzzyControlRight x:Name="NegativeControl" Grid.Column="0" Grid.Row="0"
-                               Min="30"
-                               Max="90"/>
-        <!---"{Binding Text, ElementName=MaxTextBox, Mode=TwoWay}"-->
-        <msi:FuzzyControlLeft x:Name="PositiveControl" Grid.Column="1" Grid.Row="0"/>
-        <!--Min="{Binding Text, ElementName=MinTextBox}" Max="{Binding Text, ElementName=MaxTextBox}"*//>-->
+        <msi:FuzzyControl x:Name="NegativeControl" Grid.Column="0" Grid.Row="0"/>
+        <msi:FuzzyControl IsLeft="true" x:Name="PositiveControl" Grid.Column="1" Grid.Row="0"/>
         <Grid  Grid.Column="0" Grid.Row="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
             <Label Content="Min" Grid.Column="0"/>
-            <TextBox Name="MinTextBox"  Grid.Column="1" TextAlignment="Center" FontSize="16"/>
+            <TextBox Name="MinTextBox"  Grid.Column="1" TextAlignment="Center" FontSize="16" Text="{Binding Min, Mode=TwoWay}"/>
         </Grid>
         <Grid  Grid.Column="1" Grid.Row="1">
             <Grid.ColumnDefinitions>
@@ -37,7 +33,7 @@
             </Grid.ColumnDefinitions>
             <Label Content="Max" Grid.Column="0"/>
             <TextBox Name="MaxTextBox"  Grid.Column="1" TextAlignment="Center" FontSize="16"
-                     TextChanged="MaxTextBox_OnTextChanged"/>
+                     Text="{Binding Max, Mode=TwoWay}"/>
         </Grid>
     </Grid>
 </UserControl>

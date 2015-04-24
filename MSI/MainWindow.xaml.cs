@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace MSI
 {
@@ -12,10 +13,10 @@ namespace MSI
         {
             InitializeComponent();
             //Relation.Text = "((tall & !weighty) & goodForBasket) | (!(tall & !weighty) & !goodForBasket)";
-            RainInput.Text = "180";
-            VisibilityInput.Text = "0";
-            TemperatureInput.Text = "80";
-            HourInput.Text = "0";
+            RainInput.Text = "5";
+            VisibilityInput.Text = "900";
+            TemperatureInput.Text = "20";
+            HourInput.Text = "15";
         }
 
         private async void Submit_OnClick(object sender, RoutedEventArgs e)
@@ -41,12 +42,20 @@ namespace MSI
                 if (!Decimal.TryParse(hourInput, out hour))
                     return String.Empty;
 
-                _fr = new FuzzyReasoning(RainControl.Parameter, null, null, null/*,TemperatureControl.Parameter, VisibilityControl.Parameter,
-                    HourControl.Parameter*/);
+                _fr = new FuzzyReasoning(RainControl.Parameter,TemperatureControl.Parameter, VisibilityControl.Parameter,
+                    HourControl.Parameter);
 
-                return _fr.Work(rain, temperature).ToString(); //,temperature,hour);
+                return _fr.Work(rain, temperature, visibility, hour).ToString(); //,temperature,hour);
 
             });
+        }
+
+        private void Selector_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            RainControl.Redraw();
+            TemperatureControl.Redraw();
+            VisibilityControl.Redraw();
+            HourControl.Redraw();
         }
     }
 }
