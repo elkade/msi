@@ -43,6 +43,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -62,6 +63,22 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="FuzzyControls\FuzzyControlBoth.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="FuzzyControls\FuzzyControlLeft.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="FuzzyControls\FuzzyControlRight.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="FuzzyControls\InputFuzzyControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -72,12 +89,26 @@
     </Compile>
     <Compile Include="Evaluator.cs" />
     <Compile Include="Fuzzy.cs" />
+    <Compile Include="FuzzyControls\FuzzyControlBoth.xaml.cs">
+      <DependentUpon>FuzzyControlBoth.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="FuzzyControls\FuzzyControlLeft.xaml.cs">
+      <DependentUpon>FuzzyControlLeft.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="FuzzyControls\FuzzyControlRight.xaml.cs">
+      <DependentUpon>FuzzyControlRight.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="FuzzyControls\InputFuzzyControl.xaml.cs">
+      <DependentUpon>InputFuzzyControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="FuzzyParameter.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
