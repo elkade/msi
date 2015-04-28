@@ -20,13 +20,13 @@
                         <RowDefinition />
                     </Grid.RowDefinitions>
                     <Label Grid.Column="0" Content="Opady deszczu" Grid.Row="0"/>
-                    <Label Grid.Column="0" Content="Godzina" Grid.Row="1"/>
-                    <Label Grid.Column="0" Content="Temperatura" Grid.Row="2"/>
-                    <Label Grid.Column="0" Content =" Widoczność"  Grid.Row="3"/>
+                    <Label Grid.Column="0" Content="Temperatura" Grid.Row="1"/>
+                    <Label Grid.Column="0" Content="Zamglenie" Grid.Row="2"/>
+                    <Label Grid.Column="0" Content ="Ciemność"  Grid.Row="3"/>
                     <TextBox Grid.Column="1" Grid.Row="0" Name="RainInput"/>
-                    <TextBox Grid.Column="1" Grid.Row="1" Name="HourInput"/>
-                    <TextBox Grid.Column="1" Grid.Row="2" Name="TemperatureInput"/>
-                    <TextBox Grid.Column="1" Grid.Row="3" Name="VisibilityInput"/>
+                    <TextBox Grid.Column="1" Grid.Row="1" Name="TemperatureInput"/>
+                    <TextBox Grid.Column="1" Grid.Row="2" Name="FogInput"/>
+                    <TextBox Grid.Column="1" Grid.Row="3" Name="DarknessInput"/>
                     <Button Grid.Column="0" Grid.Row="4" Content="Submit" Click="Submit_OnClick"/>
                     <TextBlock Grid.Column="1" Grid.Row="4" Name="Output" Height="50"/>
                 </Grid>
@@ -34,17 +34,23 @@
             <TabItem Header="ExpertPanel" >
                 <Grid >
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
                         <RowDefinition />
+                        <RowDefinition Height="Auto" />
                         <RowDefinition />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
-                    <fuzzyControls:InputFuzzyControl Min="0" Max="10"  x:Name="RainControl" Grid.Column="0" Grid.Row="0"/>
-                    <fuzzyControls:InputFuzzyControl Min="-20" Max="40" x:Name="TemperatureControl" Grid.Column="1" Grid.Row="0" />
-                    <fuzzyControls:InputFuzzyControl Min="0" Max="1000" x:Name="VisibilityControl" Grid.Column="0" Grid.Row="1" />
-                    <fuzzyControls:InputFuzzyControl Min="0" Max="24" x:Name="HourControl" Grid.Column="1" Grid.Row="1" />
+                    <Label Content="Deszcz" Grid.Column="0" Grid.Row="0"/>
+                    <Label Content="Temperatura" Grid.Column="1" Grid.Row="0"/>
+                    <Label Content="Mgła" Grid.Column="0" Grid.Row="2"/>
+                    <Label Content="Ciemność" Grid.Column="1" Grid.Row="2"/>
+                    <fuzzyControls:InputFuzzyControl Min="0" Max="10" x:Name="RainControl" Grid.Column="0" Grid.Row="1"/>
+                    <fuzzyControls:InputFuzzyControl Min="0" Max="10" x:Name="TemperatureControl" Grid.Column="1" Grid.Row="1" />
+                    <fuzzyControls:InputFuzzyControl Min="0" Max="10" x:Name="FogControl" Grid.Column="0" Grid.Row="3" />
+                    <fuzzyControls:InputFuzzyControl Min="0" Max="10" x:Name="DarknessControl" Grid.Column="1" Grid.Row="3" />
                 </Grid>
             </TabItem>
         </TabControl>

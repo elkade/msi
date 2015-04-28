@@ -14,38 +14,38 @@ namespace MSI
             InitializeComponent();
             //Relation.Text = "((tall & !weighty) & goodForBasket) | (!(tall & !weighty) & !goodForBasket)";
             RainInput.Text = "5";
-            VisibilityInput.Text = "900";
-            TemperatureInput.Text = "20";
-            HourInput.Text = "15";
+            FogInput.Text = "5";
+            TemperatureInput.Text = "5";
+            DarknessInput.Text = "5";
         }
 
         private async void Submit_OnClick(object sender, RoutedEventArgs e)
         {
-            Output.Text = await Reasoning(RainInput.Text, VisibilityInput.Text, TemperatureInput.Text, HourInput.Text);
+            Output.Text = await Reasoning(RainInput.Text, FogInput.Text, TemperatureInput.Text, DarknessInput.Text);
         }
 
-        private async Task<string> Reasoning(string rainInput, string visibilityInput, string temperatureInput, string hourInput)
+        private async Task<string> Reasoning(string rainInput, string fogInput, string temperatureInput, string darknessInput)
         {
             return await Task.Run(() =>
             {
                 decimal rain;
-                decimal visibility;
+                decimal fog;
                 decimal temperature;
-                decimal hour;
+                decimal darkness;
 
                 if (!Decimal.TryParse(rainInput, out rain))
                     return String.Empty;
-                if (!Decimal.TryParse(visibilityInput, out visibility))
+                if (!Decimal.TryParse(fogInput, out fog))
                     return String.Empty;
                 if (!Decimal.TryParse(temperatureInput, out temperature))
                     return String.Empty;
-                if (!Decimal.TryParse(hourInput, out hour))
+                if (!Decimal.TryParse(darknessInput, out darkness))
                     return String.Empty;
 
-                _fr = new FuzzyReasoning(RainControl.Parameter,TemperatureControl.Parameter, VisibilityControl.Parameter,
-                    HourControl.Parameter);
+                _fr = new FuzzyReasoning(RainControl.Parameter,TemperatureControl.Parameter, FogControl.Parameter,
+                    DarknessControl.Parameter);
 
-                return _fr.Work(rain, temperature, visibility, hour).ToString(); //,temperature,hour);
+                return _fr.Work(rain, temperature, fog, darkness).ToString(); //,temperature,hour);
 
             });
         }
@@ -54,8 +54,8 @@ namespace MSI
         {
             RainControl.Redraw();
             TemperatureControl.Redraw();
-            VisibilityControl.Redraw();
-            HourControl.Redraw();
+            FogControl.Redraw();
+            DarknessControl.Redraw();
         }
     }
 }
