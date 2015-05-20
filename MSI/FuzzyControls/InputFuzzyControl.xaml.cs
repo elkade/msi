@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Controls;
 using System.Windows.Media;
+using FuzzyFramework.Dimensions;
 using MSI.Annotations;
 
 namespace MSI.FuzzyControls
@@ -40,8 +41,7 @@ namespace MSI.FuzzyControls
                 //double d;
                 //if (Double.TryParse(_min, out d))
                 //{
-                    PositiveControl.Min = _min;
-                    NegativeControl.Min = _min;
+                UpdateSubcontrols();
                 //}
                 OnPropertyChanged();
             }
@@ -56,11 +56,26 @@ namespace MSI.FuzzyControls
                 //double d;
                 //if (Double.TryParse(_max, out d))
                 //{
-                    PositiveControl.Max = _max;
-                    NegativeControl.Max = _max;
+                UpdateSubcontrols();
+
                 //}
                 OnPropertyChanged();
             }
+        }
+
+        public ContinuousDimension Dimension { get; set; }
+        private void UpdateSubcontrols()
+        {
+            if (_min < _max)
+            {
+                Dimension = new ContinuousDimension("Name", "Description", "Unit", (decimal)_min, (decimal)_max);
+                PositiveControl.Dimension = Dimension;
+                NegativeControl.Dimension = Dimension;
+            }
+
+            PositiveControl.Max = _max;
+            NegativeControl.Max = _max;
+
         }
 
         public InputFuzzyControl()
@@ -76,7 +91,8 @@ namespace MSI.FuzzyControls
                 return new FuzzyParameter
                 {
                     PositiveSet = PositiveControl.FuzzySet,
-                    NegativeSet = NegativeControl.FuzzySet
+                    NegativeSet = NegativeControl.FuzzySet,
+                    Dimension = Dimension,
                 };
             }
         }

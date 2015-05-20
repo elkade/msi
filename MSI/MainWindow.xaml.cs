@@ -51,7 +51,7 @@ namespace MSI
                     return String.Empty;
 
                 _fr = new FuzzyReasoning(RainControl.Parameter,TemperatureControl.Parameter, FogControl.Parameter,
-                    DarknessControl.Parameter);
+                    DarknessControl.Parameter, ResultControl.Parameter);
 
                 var r =  _fr.Work(rain, temperature, fog, darkness); //,temperature,hour);
                 var chart = (PictureBox)Wfh.Child;

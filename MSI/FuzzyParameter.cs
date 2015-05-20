@@ -1,4 +1,5 @@
-﻿using FuzzyFramework.Sets;
+﻿using FuzzyFramework.Dimensions;
+using FuzzyFramework.Sets;
 
 namespace MSI
 {
@@ -6,6 +7,7 @@ namespace MSI
     {
         public FuzzySet NegativeSet { get; set; }
         public FuzzySet PositiveSet { get; set; }
+        public Dimension Dimension { get; set; }
     }
     public class FuzzyParameterEx
     {

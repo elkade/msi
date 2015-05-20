@@ -12,13 +12,15 @@ namespace MSI
         private readonly FuzzyParameter _temperatureParam;
         private readonly FuzzyParameter _fogParam;
         private readonly FuzzyParameter _darknessParam;
+        private readonly FuzzyParameter _resultParam;
 
-        public FuzzyReasoning(FuzzyParameter rainParam, FuzzyParameter temperatureParam, FuzzyParameter fogParam, FuzzyParameter darknessParam)
+        public FuzzyReasoning(FuzzyParameter rainParam, FuzzyParameter temperatureParam, FuzzyParameter fogParam, FuzzyParameter darknessParam, FuzzyParameter resultParam)
         {
             _rainParam = rainParam;
             _temperatureParam = temperatureParam;
             _fogParam = fogParam;
             _darknessParam = darknessParam;
+            _resultParam = resultParam;
         }
 
         // public decimal Work(decimal rain, decimal visibility, decimal temperature, decimal hour)
@@ -48,8 +50,8 @@ namespace MSI
             //_weighty = new LeftLinearSet(weight, "Weighty person", 80, 100);
 
             //  output set:
-            FuzzySet goodConditions = new LeftLinearSet(consequent, "Good conditions", 5, 10);
-            FuzzySet badConditions = new RightLinearSet(consequent, "Bad conditions", 5, 10);
+            FuzzySet goodConditions = _resultParam.PositiveSet;//*/new LeftQuadraticSet(consequent, "Good conditions", 5, 7.5m, 10);
+            FuzzySet badConditions = _resultParam.NegativeSet;//*/new RightQuadraticSet(consequent, "Bad conditions", 5, 7.5m, 10);
             //FuzzySet badConditions = new RightLinearSet(consequent, "Good in basket ball", 0, 10);
             //FuzzySet mediumConditions = new TrapezoidalSet(consequent, "", 4,6,2,8);
 
@@ -84,14 +86,10 @@ namespace MSI
             Defuzzification result = new MeanOfMaximum(
                 term,
                 new Dictionary<IDimension, decimal>{
-                    { _rainParam.PositiveSet.Dimensions[0], rainValue },
-                    { _rainParam.NegativeSet.Dimensions[0], rainValue },
-                   { _temperatureParam.PositiveSet.Dimensions[0], temperatureValue },
-                    { _temperatureParam.NegativeSet.Dimensions[0], temperatureValue },
-                    //{ _fogParam.PositiveSet.Dimensions[0], fogValue },
-                    //{ _fogParam.NegativeSet.Dimensions[0], fogValue },
-                   // { _darknessParam.PositiveSet.Dimensions[0], darknessValue },
-                    //{ _darknessParam.NegativeSet.Dimensions[0], darknessValue },
+                    { _rainParam.Dimension, rainValue },
+                   { _temperatureParam.Dimension, temperatureValue },
+                    //{ _fogParam.Dimension, fogValue },
+                   // { _darknessParam.Dimension, darknessValue },
                 }
             );
 

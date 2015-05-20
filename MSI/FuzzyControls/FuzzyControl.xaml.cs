@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using System.Windows.Documents;
 using System.Windows.Forms;
 using FuzzyFramework.Dimensions;
 using FuzzyFramework.Graphics;
@@ -25,7 +26,7 @@ namespace MSI
 
         private double _bot;
 
-        private ContinuousDimension _dimension;
+        public ContinuousDimension Dimension { get; set; }
 
         private FuzzySet _fuzzySet;
         private double _max;
@@ -50,7 +51,7 @@ namespace MSI
             _max = 100;
             _min = 0;
             IsLeft = false;
-
+            Dimension = new ContinuousDimension("Name", "Description", "Unit", (decimal)_min, (decimal)_max);
             InitializeComponent();
 
             UpdateChart();
@@ -148,12 +149,12 @@ namespace MSI
         {
             if (_min >= _max)
                 return;
-            _dimension = new ContinuousDimension(FuzzyName, Description, Unit, (decimal)_min, (decimal)_max);
+            //_dimension = new ContinuousDimension(FuzzyName, Description, Unit, (decimal)_min, (decimal)_max);
 
             if(IsLeft)
-            _fuzzySet = new LeftQuadraticSet(_dimension, FuzzyName, (decimal)_bot, (decimal)_mid, (decimal)_top);
+            _fuzzySet = new LeftQuadraticSet(Dimension, FuzzyName, (decimal)_bot, (decimal)_mid, (decimal)_top);
             else
-                _fuzzySet = new RightQuadraticSet(_dimension, FuzzyName, (decimal)_top, (decimal)_mid, (decimal)_bot);
+                _fuzzySet = new RightQuadraticSet(Dimension, FuzzyName, (decimal)_top, (decimal)_mid, (decimal)_bot);
 
             //_fuzzySet = new RightQuadraticSet(_dimension, FuzzyName, Top, Mid,Bot);
             var chart = (PictureBox) Wfh.Child;
