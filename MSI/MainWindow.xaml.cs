@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Forms;
+using FuzzyFramework.Graphics;
 
 namespace MSI
 {
@@ -13,19 +17,23 @@ namespace MSI
         {
             InitializeComponent();
             //Relation.Text = "((tall & !weighty) & goodForBasket) | (!(tall & !weighty) & !goodForBasket)";
-            RainInput.Text = "5";
-            FogInput.Text = "5";
-            TemperatureInput.Text = "5";
-            DarknessInput.Text = "5";
+            RainControl.Value = 5;
+            FogControl.Value = 5;
+            TemperatureControl.Value = 5;
+            DarknessControl.Value = 5;
         }
 
         private async void Submit_OnClick(object sender, RoutedEventArgs e)
         {
-            Output.Text = await Reasoning(RainInput.Text, FogInput.Text, TemperatureInput.Text, DarknessInput.Text);
+            Output.Text = await Reasoning(RainControl.Value.ToString(), FogControl.Value.ToString(), TemperatureControl.Value.ToString(), DarknessControl.Value.ToString());
         }
 
         private async Task<string> Reasoning(string rainInput, string fogInput, string temperatureInput, string darknessInput)
         {
+            Debug.WriteLine(rainInput);
+            Debug.WriteLine(fogInput);
+            Debug.WriteLine(temperatureInput);
+            Debug.WriteLine(darknessInput);
             return await Task.Run(() =>
             {
                 decimal rain;
@@ -45,17 +53,14 @@ namespace MSI
                 _fr = new FuzzyReasoning(RainControl.Parameter,TemperatureControl.Parameter, FogControl.Parameter,
                     DarknessControl.Parameter);
 
-                return _fr.Work(rain, temperature, fog, darkness).ToString(); //,temperature,hour);
-
+                var r =  _fr.Work(rain, temperature, fog, darkness); //,temperature,hour);
+                var chart = (PictureBox)Wfh.Child;
+                var imgBuyIt = new RelationImage(r.Relation,r.Inputs,r.OutputDimension);
+                var bmpBuyIt = new Bitmap(chart.Width, chart.Height);
+                imgBuyIt.DrawImage(Graphics.FromImage(bmpBuyIt));
+                chart.Image = bmpBuyIt;
+                return r.CrispValue.ToString();
             });
-        }
-
-        private void Selector_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            RainControl.Redraw();
-            TemperatureControl.Redraw();
-            FogControl.Redraw();
-            DarknessControl.Redraw();
         }
     }
 }

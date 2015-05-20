@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Controls;
+using System.Windows.Media;
 using MSI.Annotations;
 
 namespace MSI.FuzzyControls
@@ -11,37 +12,53 @@ namespace MSI.FuzzyControls
     /// </summary>
     public partial class InputFuzzyControl : UserControl, INotifyPropertyChanged
     {
-        private string _min;
-        private string _max;
 
-        public string Min
+        private double _value;
+
+        public double SliderValue
+        {
+            get { return 10 * (Value - Min) / (Max - Min); }
+            set { OnPropertyChanged("Value"); Value = Min + (Max - Min) * (value / 10); }
+        }
+
+        public double Value
+        {
+            get { return Math.Round(_value, 2); }
+            set { _value = value; OnPropertyChanged("SliderValue"); }
+        }
+
+
+        private double _min;
+        private double _max;
+
+        public double Min
         {
             get { return _min; }
             set
             {
                 _min = value;
-                double d;
-                if (Double.TryParse(_min, out d))
-                {
-                    PositiveControl.Min = d;
-                    NegativeControl.Min = d;
-                }
+                //double d;
+                //if (Double.TryParse(_min, out d))
+                //{
+                    PositiveControl.Min = _min;
+                    NegativeControl.Min = _min;
+                //}
                 OnPropertyChanged();
             }
         }
 
-        public string Max
+        public double Max
         {
             get { return _max; }
             set
             {
                 _max = value;
-                double d;
-                if (Double.TryParse(_max, out d))
-                {
-                    PositiveControl.Max = d;
-                    NegativeControl.Max = d;
-                }
+                //double d;
+                //if (Double.TryParse(_max, out d))
+                //{
+                    PositiveControl.Max = _max;
+                    NegativeControl.Max = _max;
+                //}
                 OnPropertyChanged();
             }
         }
@@ -49,8 +66,8 @@ namespace MSI.FuzzyControls
         public InputFuzzyControl()
         {
             InitializeComponent();
-            MinTextBox.Text = Min;
-            MaxTextBox.Text = Max;
+            MinTextBox.Text = Min.ToString();
+            MaxTextBox.Text = Max.ToString();
         }
         public FuzzyParameter Parameter
         {
@@ -76,6 +93,12 @@ namespace MSI.FuzzyControls
         {
             PropertyChangedEventHandler handler = PropertyChanged;
             if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        protected override void OnRender(DrawingContext drawingContext)
+        {
+            base.OnRender(drawingContext);
+            Redraw();
         }
     }
 }

@@ -22,7 +22,7 @@ namespace MSI
         }
 
         // public decimal Work(decimal rain, decimal visibility, decimal temperature, decimal hour)
-        public decimal Work(decimal rainValue, decimal temperatureValue, decimal fogValue, decimal darknessValue)
+        public Defuzzification Work(decimal rainValue, decimal temperatureValue, decimal fogValue, decimal darknessValue)
         {
             FuzzySet zimno = _temperatureParam.NegativeSet;
             FuzzySet cieplo = _temperatureParam.PositiveSet;
@@ -48,7 +48,8 @@ namespace MSI
             //_weighty = new LeftLinearSet(weight, "Weighty person", 80, 100);
 
             //  output set:
-            FuzzySet goodConditions = new LeftLinearSet(consequent, "Good conditions", 0, 10);
+            FuzzySet goodConditions = new LeftLinearSet(consequent, "Good conditions", 5, 10);
+            FuzzySet badConditions = new RightLinearSet(consequent, "Bad conditions", 5, 10);
             //FuzzySet badConditions = new RightLinearSet(consequent, "Good in basket ball", 0, 10);
             //FuzzySet mediumConditions = new TrapezoidalSet(consequent, "", 4,6,2,8);
 
@@ -59,7 +60,7 @@ namespace MSI
             //FuzzyRelation term = ((_rainParam.PositiveSet & !_temperatureParam.PositiveSet) & goodForBasket) | ((!_rainParam.PositiveSet & _temperatureParam.PositiveSet) & !goodForBasket);
             FuzzyRelation term =
                 //((zimno) & badConditions) |
-                ((sucho & cieplo) & goodConditions) | ((zimno & mokro) & !goodConditions);
+                ((sucho & cieplo) & goodConditions) | ((zimno & mokro) & badConditions);
                 //((deszcz & zimno) & !goodConditions) | ((deszcz & !zimno) & goodConditions);
                 //((deszcz) & badConditions) |
                 //((mgla) & badConditions) |
@@ -85,15 +86,16 @@ namespace MSI
                 new Dictionary<IDimension, decimal>{
                     { _rainParam.PositiveSet.Dimensions[0], rainValue },
                     { _rainParam.NegativeSet.Dimensions[0], rainValue },
-                    { _temperatureParam.PositiveSet.Dimensions[0], temperatureValue },
+                   { _temperatureParam.PositiveSet.Dimensions[0], temperatureValue },
                     { _temperatureParam.NegativeSet.Dimensions[0], temperatureValue },
-                    { _fogParam.PositiveSet.Dimensions[0], fogValue },
-                    { _fogParam.NegativeSet.Dimensions[0], fogValue },
-                    { _darknessParam.PositiveSet.Dimensions[0], darknessValue },
-                    { _darknessParam.NegativeSet.Dimensions[0], darknessValue },
+                    //{ _fogParam.PositiveSet.Dimensions[0], fogValue },
+                    //{ _fogParam.NegativeSet.Dimensions[0], fogValue },
+                   // { _darknessParam.PositiveSet.Dimensions[0], darknessValue },
+                    //{ _darknessParam.NegativeSet.Dimensions[0], darknessValue },
                 }
             );
-            return result.CrispValue;
+
+            return result;
         }
     }
 }

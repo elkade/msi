@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.CompilerServices;
 using System.Windows;
@@ -24,7 +25,6 @@ namespace MSI
 
         private double _bot;
 
-
         private ContinuousDimension _dimension;
 
         private FuzzySet _fuzzySet;
@@ -32,19 +32,24 @@ namespace MSI
         private double _mid;
         private double _min;
         private double _top;
+        private bool _isLeft;
 
-        public bool IsLeft { get; set; }
+
+        public bool IsLeft
+        {
+            get { return _isLeft; }
+            set
+            {
+                _isLeft = value;
+                SetParams();
+            }
+        }
 
         public FuzzyControl()
         {
-            IsLeft = false;
-
             _max = 100;
             _min = 0;
-
-            _top = Min;
-            _mid = (Max + Min)/2;
-            _bot = Max;
+            IsLeft = false;
 
             InitializeComponent();
 
@@ -62,24 +67,19 @@ namespace MSI
 
         public string Unit { get; set; }
 
+        /// <summary>
+        /// Gets or sets the maximum.
+        /// </summary>
+        /// <value>
+        /// W jednostkach prawdziwych - nie sliderowych
+        /// </value>
         public double Max
         {
             get { return _max; }
             set
             {
-                if (value <= _min || value < double.Epsilon)
-                    return;
                 _max = value;
-                _top = _top >= _max ? _max - 1 : _top;
-                _mid = _mid >= _max ? _max - 1 : _mid;
-                _bot = _bot >= _max ? _max - 1 : _bot;
-                _top = _top < _min ? _min : _top;
-                _mid = _mid < _top ? _top + 1 : _mid;
-                _bot = _bot < _mid ? _mid + 1 : _bot;
-                OnPropertyChanged("Top");
-                OnPropertyChanged("Mid");
-                OnPropertyChanged("Bot");
-                OnPropertyChanged();
+                SetParams();
                 UpdateChart();
             }
         }
@@ -89,53 +89,55 @@ namespace MSI
             get { return _min; }
             set
             {
-                if (value >= _max)
-                    return;
-                _max = value;
-                _top = _top <= _min ? _min + 1 : _top;
-                _mid = _mid <= _min ? _min + 2 : _mid;
-                _bot = _bot <= _min ? _min + 2 : _bot;
-                _top = _top > _max ? _max - 1 : _top;
-                _mid = _mid > _top ? _top - 1 : _mid;
-                _bot = _bot > _mid ? _mid - 1 : _bot;
-                OnPropertyChanged("Top");
-                OnPropertyChanged("Mid");
-                OnPropertyChanged("Bot");
-                OnPropertyChanged();
+                _min = value;
+                SetParams();
                 UpdateChart();
+            }
+        }
+
+        private void SetParams()
+        {
+            if (!IsLeft)
+            {
+                _top = Min;
+                _mid = (Max + Min)/2;
+                _bot = Max;
+                OnPropertyChanged("Top");
+                OnPropertyChanged("Bot");
+            }
+            else
+            {
+                _top = Max;
+                _mid = (Max + Min) / 2;
+                _bot = Min;
+                OnPropertyChanged("Top");
+                OnPropertyChanged("Bot");
             }
         }
 
         public double Top
         {
-            get { return 10*_top/(Max - Min); }
+            get { return 10 * (_top-Min) / (Max - Min); }
             set
             {
                 _top = Min + (Max - Min)*(value/10);
-                _top = _top >= _mid ? _mid - 1 : _top;
+                _mid = (_top + _bot)/2;
                 UpdateChart();
             }
         }
-
-        public double Mid
-        {
-            get { return 10*_mid/(Max - Min); }
-            set
-            {
-                _mid = Min + (Max - Min)*(value/10);
-                _mid = _mid <= _top ? _top + 1 : _mid;
-                _mid = _mid >= _bot ? _bot - 1 : _mid;
-                UpdateChart();
-            }
-        }
-
+        /// <summary>
+        /// Gets or sets the bot.
+        /// </summary>
+        /// <value>
+        /// zbindowany ze sliderem - przyjmuje i zwraca wartości sliderowe
+        /// </value>
         public double Bot
         {
-            get { return 10*_bot/(Max - Min); }
+            get { return 10 * (_bot-Min) / (Max - Min); }
             set
             {
-                _bot = Min + (Max - Min)*(value/10);
-                _bot = _bot <= _mid ? _mid + 1 : _bot;
+                _bot = Min + (Max - Min) * (value / 10);
+                _mid = (_top + _bot) / 2;
                 UpdateChart();
             }
         }
@@ -148,10 +150,8 @@ namespace MSI
                 return;
             _dimension = new ContinuousDimension(FuzzyName, Description, Unit, (decimal)_min, (decimal)_max);
 
-            if (_top == _mid || _mid == _bot)
-                return;
             if(IsLeft)
-            _fuzzySet = new LeftQuadraticSet(_dimension, FuzzyName, (decimal) _top, (decimal) _mid, (decimal) _bot);
+            _fuzzySet = new LeftQuadraticSet(_dimension, FuzzyName, (decimal)_bot, (decimal)_mid, (decimal)_top);
             else
                 _fuzzySet = new RightQuadraticSet(_dimension, FuzzyName, (decimal)_top, (decimal)_mid, (decimal)_bot);
 

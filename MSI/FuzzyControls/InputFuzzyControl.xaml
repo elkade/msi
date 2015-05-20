@@ -5,8 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:msi="clr-namespace:MSI"
              mc:Ignorable="d" DataContext="{Binding RelativeSource={RelativeSource Self}}"
-             d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
+             d:DesignHeight="300" d:DesignWidth="300" BorderThickness="3" BorderBrush="Black">
+        <Grid Margin="0">
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
             <ColumnDefinition />
@@ -14,26 +14,33 @@
         <Grid.RowDefinitions>
             <RowDefinition />
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <msi:FuzzyControl x:Name="NegativeControl" Grid.Column="0" Grid.Row="0" Opacity="0.5"/>
-        <msi:FuzzyControl IsLeft="true" x:Name="PositiveControl" Grid.Column="0" Grid.Row="0" Opacity="0.5"/>
-        <Grid  Grid.Column="0" Grid.Row="1">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition />
-                </Grid.ColumnDefinitions>
-            <Label Content="Min" Grid.Column="0"/>
-            <TextBox Name="MinTextBox"  Grid.Column="1" TextAlignment="Center" FontSize="16" Text="{Binding Min, Mode=TwoWay}"/>
-        </Grid>
-        <Grid  Grid.Column="1" Grid.Row="1">
+        <msi:FuzzyControl x:Name="NegativeControl" Grid.Column="0" Grid.Row="0"/>
+        <msi:FuzzyControl IsLeft="true" x:Name="PositiveControl" Grid.Column="1" Grid.Row="0"/>
+        <Grid  Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition/>
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
-            <Label Content="Max" Grid.Column="0"/>
-            <TextBox Name="MaxTextBox"  Grid.Column="1" TextAlignment="Center" FontSize="16"
-                     Text="{Binding Max, Mode=TwoWay}"/>
+            <Label Content="Min" Grid.Column="0" HorizontalAlignment="Right"/>
+            <TextBox Name="MinTextBox" Grid.Column="1" TextAlignment="Center" FontSize="16"
+                     Text="{Binding Min, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" x:FieldModifier="private" />
+            <Label Content="Value" Grid.Column="2" HorizontalAlignment="Right"/>
+            <TextBox Grid.Column="3"  Grid.Row="0" Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                     TextAlignment="Center" FontSize="16"/>
+            <Label Content="Max" Grid.Column="4" HorizontalAlignment="Right"/>
+            <TextBox Name="MaxTextBox" Grid.Column="5" TextAlignment="Center" FontSize="16"
+                     Text="{Binding Max, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" x:FieldModifier="private" />
         </Grid>
-    </Grid>
+
+        <Slider  Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" VerticalAlignment="Center" Value="{Binding SliderValue, Mode=TwoWay}" Margin="4,0,0,0" />
+
+        </Grid>
+
 </UserControl>
