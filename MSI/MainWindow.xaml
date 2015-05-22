@@ -3,27 +3,37 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:fuzzyControls="clr-namespace:MSI.FuzzyControls"
         xmlns:forms="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
+        xmlns:msi="clr-namespace:MSI"
+        xmlns:system="clr-namespace:System;assembly=mscorlib"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}"
         Title="MainWindow" Height="650" Width="1225" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <ObjectDataProvider MethodName="GetValues"
+                    ObjectType="{x:Type system:Enum}"
+                    x:Key="DetailScopeDataProvider">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="msi:DefuzMethod" />
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+    </Window.Resources>
     <Grid>
         <Grid Grid.Column="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
-                <RowDefinition />
+                <RowDefinition Height="4*"/>
                 <RowDefinition Height="Auto" />
-                <RowDefinition />
+                <RowDefinition Height="3*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="33*" />
-                <ColumnDefinition Width="423*" />
-                <ColumnDefinition Width="455*" />
-                <ColumnDefinition Width="455*" />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
             </Grid.ColumnDefinitions>
-            <fuzzyControls:InputFuzzyControl Min="0" Max="10" x:Name="ResultControl" Grid.Column="3" Grid.Row="1"/>
 
-            <Grid Grid.Column="3" Grid.Row="3">
+            <Grid Grid.Column="1" Grid.Row="3" Grid.ColumnSpan="3">
                 <Grid.RowDefinitions>
-                    <RowDefinition />
-                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <WindowsFormsHost  Name="Wfh" >
@@ -31,25 +41,39 @@
                 </WindowsFormsHost>
                 <Grid Grid.Row="1">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition />
-                        <ColumnDefinition />
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <Button Grid.Column="0" Content="Submit" Click="Submit_OnClick" />
-                    <TextBlock Grid.Column="1" Name="Output" Height="50" FontSize="20"/>
+                    <ComboBox Grid.Column="1" SelectedItem="{Binding Method}"
+                              ItemsSource="{Binding Source={StaticResource DetailScopeDataProvider}}" Width="200"></ComboBox>
+                    <TextBlock Grid.Column="2" Text="    Wynik:    "  FontSize="15" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Column="3" x:Name="Output"  FontSize="15" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Column="4" x:Name="Interpretation" FontSize="15" VerticalAlignment="Center"/>
 
                 </Grid>
             </Grid>
-            <Label Content="Deszcz" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" />
-            <Label Content="Temperatura" Grid.Column="2" Grid.Row="0" />
-            <Label Content="Mgła" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" />
-            <Label Content="Ciemność" Grid.Column="2" Grid.Row="2" />
-            <Label Content="Warunki na drodze" Grid.Column="3" Grid.Row="0" />
-            <fuzzyControls:InputFuzzyControl Min="0" Max="10" x:Name="RainControl" Grid.Column="0" Grid.Row="1"
-                                             Grid.ColumnSpan="2" />
-            <fuzzyControls:InputFuzzyControl Min="0" Max="10" x:Name="TemperatureControl" Grid.Column="2" Grid.Row="1" />
-            <fuzzyControls:InputFuzzyControl Min="0" Max="10" x:Name="FogControl" Grid.Column="0" Grid.Row="3"
-                                             Grid.ColumnSpan="2" />
-            <fuzzyControls:InputFuzzyControl Min="0" Max="10" x:Name="DarknessControl" Grid.Column="2" Grid.Row="3" />
+            <Label Content="Deszcz [mm/h]" Grid.Column="0" Grid.Row="0"/>
+            <Label Content="Temperatura [stopnie C]" Grid.Column="1" Grid.Row="0" />
+            <Label Content="Widoczność [m]" Grid.Column="2" Grid.Row="0" />
+            <!--<Label Content="Ciemność" Grid.Column="3" Grid.Row="0" />-->
+            <Label Content="Warunki na drodze" Grid.Column="0" Grid.Row="2" />
+            <fuzzyControls:InputFuzzyControl Min="0" Max="200" x:Name="RainControl" Grid.Column="0" Grid.Row="1"/>
+            <fuzzyControls:InputFuzzyControl Min="-20" Max="40" x:Name="TemperatureControl" Grid.Column="1" Grid.Row="1" />
+            <fuzzyControls:InputFuzzyControl Min="0" Max="2000" x:Name="FogControl" Grid.Column="2" Grid.Row="1"/>
+            <!--<fuzzyControls:InputFuzzyControl Min="0" Max="10" x:Name="DarknessControl" Grid.Column="3" Grid.Row="1" />-->
+            <Grid Grid.Column="0" Grid.Row="3">
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <msi:FuzzyControl Grid.Row="0" Grid.Column="0" x:Name="BadCondControl" x:FieldModifier="private" />
+                <msi:FuzzyControl Grid.Row="1" Grid.Column="0" x:Name="GoodCondControl" IsLeft="True"
+                                  x:FieldModifier="private" />
+            </Grid>
         </Grid>
     </Grid>
 </Window>

@@ -38,11 +38,13 @@ namespace MSI.FuzzyControls
             set
             {
                 _min = value;
+                SliderValue = 5;
                 //double d;
                 //if (Double.TryParse(_min, out d))
                 //{
                 UpdateSubcontrols();
                 //}
+                SliderValue = 5;
                 OnPropertyChanged();
             }
         }
@@ -53,11 +55,12 @@ namespace MSI.FuzzyControls
             set
             {
                 _max = value;
+                SliderValue = 5;
                 //double d;
                 //if (Double.TryParse(_max, out d))
                 //{
                 UpdateSubcontrols();
-
+                SliderValue = 5;
                 //}
                 OnPropertyChanged();
             }
@@ -68,14 +71,20 @@ namespace MSI.FuzzyControls
         {
             if (_min < _max)
             {
-                Dimension = new ContinuousDimension("Name", "Description", "Unit", (decimal)_min, (decimal)_max);
+                Dimension = new ContinuousDimension("", "", "", (decimal)_min, (decimal)_max);
                 PositiveControl.Dimension = Dimension;
                 NegativeControl.Dimension = Dimension;
             }
-
+            PositiveControl.ShallUpdateChart = false;
+            NegativeControl.ShallUpdateChart = false;
             PositiveControl.Max = _max;
             NegativeControl.Max = _max;
-
+            PositiveControl.Min = _min;
+            NegativeControl.Min = _min;
+            PositiveControl.ShallUpdateChart = true;
+            NegativeControl.ShallUpdateChart = true;
+            PositiveControl.UpdateChart();
+            NegativeControl.UpdateChart();
         }
 
         public InputFuzzyControl()
@@ -96,11 +105,6 @@ namespace MSI.FuzzyControls
                 };
             }
         }
-        public void Redraw()
-        {
-            NegativeControl.UpdateChart();
-            PositiveControl.UpdateChart();
-        }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -109,12 +113,6 @@ namespace MSI.FuzzyControls
         {
             PropertyChangedEventHandler handler = PropertyChanged;
             if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        protected override void OnRender(DrawingContext drawingContext)
-        {
-            base.OnRender(drawingContext);
-            Redraw();
         }
     }
 }

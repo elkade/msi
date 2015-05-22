@@ -1,10 +1,12 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Forms;
+using System.Windows.Media;
 using FuzzyFramework.Dimensions;
 using FuzzyFramework.Graphics;
 using FuzzyFramework.Sets;
@@ -35,6 +37,7 @@ namespace MSI
         private double _top;
         private bool _isLeft;
 
+        public bool ShallUpdateChart = true;
 
         public bool IsLeft
         {
@@ -122,6 +125,7 @@ namespace MSI
             set
             {
                 _top = Min + (Max - Min)*(value/10);
+                Debug.WriteLine(Min + "   " + _top);
                 _mid = (_top + _bot)/2;
                 UpdateChart();
             }
@@ -138,6 +142,7 @@ namespace MSI
             set
             {
                 _bot = Min + (Max - Min) * (value / 10);
+                Debug.WriteLine(Min + "   " +_bot);
                 _mid = (_top + _bot) / 2;
                 UpdateChart();
             }
@@ -147,6 +152,8 @@ namespace MSI
 
         public void UpdateChart()
         {
+            if (!ShallUpdateChart)
+                return;
             if (_min >= _max)
                 return;
             //_dimension = new ContinuousDimension(FuzzyName, Description, Unit, (decimal)_min, (decimal)_max);
@@ -169,6 +176,11 @@ namespace MSI
         {
             PropertyChangedEventHandler handler = PropertyChanged;
             if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
+        }
+        protected override void OnRender(DrawingContext drawingContext)
+        {
+            base.OnRender(drawingContext);
+            UpdateChart();
         }
     }
 }

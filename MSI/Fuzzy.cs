@@ -11,29 +11,30 @@ namespace MSI
         private readonly FuzzyParameter _rainParam;
         private readonly FuzzyParameter _temperatureParam;
         private readonly FuzzyParameter _fogParam;
-        private readonly FuzzyParameter _darknessParam;
+       // private readonly FuzzyParameter _darknessParam;
         private readonly FuzzyParameter _resultParam;
 
-        public FuzzyReasoning(FuzzyParameter rainParam, FuzzyParameter temperatureParam, FuzzyParameter fogParam, FuzzyParameter darknessParam, FuzzyParameter resultParam)
+        public FuzzyReasoning(FuzzyParameter rainParam, FuzzyParameter temperatureParam, FuzzyParameter fogParam/*, FuzzyParameter darknessParam*/, FuzzyParameter resultParam)
         {
             _rainParam = rainParam;
             _temperatureParam = temperatureParam;
             _fogParam = fogParam;
-            _darknessParam = darknessParam;
+           // _darknessParam = darknessParam;
             _resultParam = resultParam;
         }
 
         // public decimal Work(decimal rain, decimal visibility, decimal temperature, decimal hour)
-        public Defuzzification Work(decimal rainValue, decimal temperatureValue, decimal fogValue, decimal darknessValue)
+        public Defuzzification Work(decimal rainValue, decimal temperatureValue, decimal fogValue/*, decimal darknessValue*/,
+            DefuzzificationFactory.DefuzzificationMethod method)
         {
             FuzzySet zimno = _temperatureParam.NegativeSet;
             FuzzySet cieplo = _temperatureParam.PositiveSet;
             FuzzySet mokro = _rainParam.PositiveSet;
             FuzzySet sucho = _rainParam.NegativeSet;
-            FuzzySet mglisto = _fogParam.PositiveSet;
-            FuzzySet przejrzyscie = _fogParam.NegativeSet;
-            FuzzySet ciemno = _darknessParam.PositiveSet;
-            FuzzySet jasno = _darknessParam.NegativeSet;
+            FuzzySet mgliscie = _fogParam.NegativeSet;
+            FuzzySet przejrzyscie = _fogParam.PositiveSet;
+           // FuzzySet ciemno = _darknessParam.PositiveSet;
+          //  FuzzySet jasno = _darknessParam.NegativeSet;
 
             //Definition of dimensions on which we will measure the input values
             //ContinuousDimension height = new ContinuousDimension("Height", "Personal height", "cm", 100, 250);
@@ -62,13 +63,16 @@ namespace MSI
             //FuzzyRelation term = ((_rainParam.PositiveSet & !_temperatureParam.PositiveSet) & goodForBasket) | ((!_rainParam.PositiveSet & _temperatureParam.PositiveSet) & !goodForBasket);
             FuzzyRelation term =
                 //((zimno) & badConditions) |
-                ((sucho & cieplo) & goodConditions) | ((zimno & mokro) & badConditions);
-                //((deszcz & zimno) & !goodConditions) | ((deszcz & !zimno) & goodConditions);
-                //((deszcz) & badConditions) |
-                //((mgla) & badConditions) |
-                //((dzien) & goodConditions)|
-            //((!dzien) & !goodConditions);
-                //((zimno & deszcz & mgla & dzien) & mediumConditions) |
+                ((sucho & cieplo) & goodConditions) |
+                ((zimno & mokro) & badConditions) |
+                ((sucho & przejrzyscie) & goodConditions) |
+                ((cieplo & przejrzyscie) & goodConditions) |
+                ((mgliscie & zimno) & badConditions) |
+                ((mgliscie & mokro) & badConditions);
+                //((mglisto & mokro) & badConditions) |
+                //((mglisto & mokro) & badConditions) |
+                //((mglisto & mokro) & badConditions) |
+                //((mglisto & mokro) & badConditions);
                 //((zimno & deszcz & mgla & noc) & badConditions) |
                 //((zimno & deszcz & brakMgly & dzien) & badConditions) |
                 //((zimno & deszcz & brakMgly & noc) & badConditions) |
@@ -81,17 +85,22 @@ namespace MSI
                 //((cieplo & deszcz & brakMgly & dzien) & goodConditions) |
                 //((cieplo & deszcz & brakMgly & noc) & goodConditions);
 
-
-
-            Defuzzification result = new MeanOfMaximum(
-                term,
-                new Dictionary<IDimension, decimal>{
-                    { _rainParam.Dimension, rainValue },
-                   { _temperatureParam.Dimension, temperatureValue },
-                    //{ _fogParam.Dimension, fogValue },
-                   // { _darknessParam.Dimension, darknessValue },
-                }
-            );
+            var result = DefuzzificationFactory.GetDefuzzification(term, new Dictionary<IDimension, decimal>
+            {
+                {_rainParam.Dimension, rainValue},
+                {_temperatureParam.Dimension, temperatureValue},
+                {_fogParam.Dimension, fogValue},
+                // { _darknessParam.Dimension, darknessValue },
+            }, method);
+            //Defuzzification result = new MeanOfMaximum(
+            //    term,
+            //    new Dictionary<IDimension, decimal>{
+            //        { _rainParam.Dimension, rainValue },
+            //       { _temperatureParam.Dimension, temperatureValue },
+            //        { _fogParam.Dimension, fogValue },
+            //       // { _darknessParam.Dimension, darknessValue },
+            //    }
+            //);
 
             return result;
         }
