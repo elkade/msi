@@ -34,14 +34,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FuzzyFramework">
-      <HintPath>..\..\..\..\..\Desktop\MSI\FuzzyFramework_demo1\FuzzyFramework\FuzzyFramework\bin\Debug\FuzzyFramework.dll</HintPath>
+    <Reference Include="FuzzyFramework, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Windows7\Desktop\FuzzyFramework_demo2\FuzzyFramework_demo2\FuzzyFramework.dll</HintPath>
     </Reference>
-    <Reference Include="FuzzyFramework.Graphics">
-      <HintPath>..\..\..\..\..\Desktop\MSI\FuzzyFramework_demo1\FuzzyFramework\FuzzyFramework.Graphics\bin\Debug\FuzzyFramework.Graphics.dll</HintPath>
+    <Reference Include="FuzzyFramework.Graphics, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Windows7\Desktop\FuzzyFramework_demo2\FuzzyFramework_demo2\FuzzyFramework.Graphics.dll</HintPath>
     </Reference>
-    <Reference Include="PolyLib">
-      <HintPath>..\..\..\..\..\Desktop\semestr6\MSI\FuzzyFramework_demo1\FuzzyFramework_demo2\PolyLib.dll</HintPath>
+    <Reference Include="PolyLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Windows7\Desktop\FuzzyFramework_demo2\FuzzyFramework_demo2\PolyLib.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -66,6 +69,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Transparent.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Page Include="FuzzyControls\FuzzyControlBoth.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -86,7 +92,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Class1.cs" />
+    <Compile Include="ContinuousDimension.cs" />
     <Compile Include="Evaluator.cs" />
     <Compile Include="Fuzzy.cs" />
     <Compile Include="FuzzyControls\FuzzyControlBoth.xaml.cs">
@@ -131,6 +137,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="FuzzyFramework.dll" />
+    <Content Include="FuzzyFramework.Graphics.dll" />
+    <Content Include="PolyLib.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
