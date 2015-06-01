@@ -4,10 +4,15 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:forms="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
+             xmlns:src="clr-namespace:MSI"
              mc:Ignorable="d" DataContext="{Binding RelativeSource={RelativeSource Self}}"
              d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <src:BoolInverterConverter x:Key="BoolInverterConverter" />
+    </UserControl.Resources>
     <Grid >
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
@@ -19,15 +24,23 @@
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <!--<Label Content="{Binding Title}" FontSize="20" Grid.ColumnSpan="2" HorizontalAlignment="Center"/>-->
-        <WindowsFormsHost Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Name="Wfh" Opacity="0.5">
+        <StackPanel Grid.ColumnSpan="2" HorizontalAlignment="Center" Orientation="Horizontal">
+            <Label x:Name="Tit" Content="{Binding Title}" HorizontalAlignment="Center" FontSize="20"/>
+            <StackPanel>
+                <RadioButton IsChecked="{Binding IsLinear, Mode=TwoWay}">Funkcja liniowa</RadioButton>
+                <RadioButton IsChecked="{Binding IsLinear, Converter={StaticResource BoolInverterConverter}}">
+                    Funkcja kwadratowa
+                </RadioButton>
+            </StackPanel>
+        </StackPanel>
+        <WindowsFormsHost Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Name="Wfh" Opacity="0.5">
             <forms:PictureBox Name="Chart" SizeMode="StretchImage"/>
         </WindowsFormsHost>
-        <Label Grid.Column="0" Grid.Row="3" Content="Top" VerticalAlignment="Center"/>
-        <Slider Grid.Column="1" Grid.Row="3" VerticalAlignment="Center"
+        <Label Grid.Column="0" Grid.Row="4" Content="Top" VerticalAlignment="Center"/>
+        <Slider Grid.Column="1" Grid.Row="4" VerticalAlignment="Center"
                 Value="{Binding Top, Mode=TwoWay}" Margin="0,4"/>
-        <Label Grid.Column="0" Grid.Row="5" Content="Bottom" VerticalAlignment="Center"/>
-        <Slider Grid.Column="1" Grid.Row="5" VerticalAlignment="Center"
+        <Label Grid.Column="0" Grid.Row="6" Content="Bottom" VerticalAlignment="Center"/>
+        <Slider Grid.Column="1" Grid.Row="6" VerticalAlignment="Center"
                 Value="{Binding Bot, Mode=TwoWay}" Margin="0,4"/>
     </Grid>
 </UserControl>

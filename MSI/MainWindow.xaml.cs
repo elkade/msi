@@ -12,16 +12,17 @@ namespace MSI
 {
     public enum DefuzMethod
     {
-        CenterOfGravity = 0,
-        LeftOfMaximum = 1,
-        RightOfMaximum = 2,
-        MeanOfMaximum = 3,
+        //CenterOfGravity = 0,
+        LeftOfMaximum = 0,
+        RightOfMaximum = 1,
+        MeanOfMaximum = 2,
     }
     public partial class MainWindow : Window
     {
 
 
         public DefuzMethod Method { get; set; }
+
         private FuzzyReasoning _fr;
         private ContinuousDimension CondDimension;
         public MainWindow()
@@ -99,7 +100,7 @@ namespace MSI
                 _fr = new FuzzyReasoning(RainControl.Parameter,TemperatureControl.Parameter, FogControl.Parameter,
                     /*DarknessControl.Parameter,*/ condParameter);
 
-                var r =  _fr.Work(rain, temperature, fog/*, darkness*/, (DefuzzificationFactory.DefuzzificationMethod)Method); //,temperature,hour);
+                var r =  _fr.Work(rain, temperature, fog/*, darkness*/, (DefuzzificationFactory.DefuzzificationMethod)(Method+1)); //,temperature,hour);
                 var chart = (PictureBox)Wfh.Child;
                 var imgBuyIt = new RelationImage(r.Relation,r.Inputs,r.OutputDimension);
                 var bmpBuyIt = new Bitmap(chart.Width, chart.Height);
